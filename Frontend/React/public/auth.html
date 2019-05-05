@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>External Auth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <script>
+    var url_string = window.location.href
+    var url = new URL(url_string);
+    var token = url.searchParams.get("token");
+    var message = {};
+
+    if (token) {
+      message.status = true;
+      message.token = token;
+    }
+    else {
+      message.status = false;
+    }
+    window.opener.postMessage(JSON.stringify(message));
+
+  </script>
+</body>
+</html>
