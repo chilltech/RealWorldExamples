@@ -33,6 +33,8 @@ Temporary Items
 logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # BlueJ files
 *.ctxt
@@ -112,6 +114,10 @@ bld/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+
+#Visual Studio Code
+.vscode
+
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -302,6 +308,9 @@ UpgradeLog*.htm
 *.mdf
 *.ldf
 
+# SQLite
+*.db
+
 # Business Intelligence projects
 *.rdl.data
 *.bim.layout
@@ -347,3 +356,8 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# Yarn
+.yarn-meta
+yarn.lock
+
