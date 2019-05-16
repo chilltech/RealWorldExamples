@@ -122,11 +122,6 @@ namespace WebApi
 
             services.AddAuthentication()
                 .AddCookie(cfg => cfg.SlidingExpiration = true)
-                .AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                })
                 .AddJwtBearer(cfg =>
                 {
                     cfg.RequireHttpsMetadata = false;
@@ -136,9 +131,22 @@ namespace WebApi
                     {
                         ValidIssuer = this.Configuration["Tokens:Issuer"],
                         ValidAudience = this.Configuration["Tokens:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
                     };
                 });
+
+            // Add Google OAuth config settings, if they exist.
+            if (!string.IsNullOrWhiteSpace(Configuration["Authentication:Google:ClientId"]) &&
+                !string.IsNullOrWhiteSpace(Configuration["Authentication:Google:ClientSecret"]))
+            {
+
+                services.AddAuthentication().AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });
+            }
 
             services.AddScoped<IDbInitializer, DbInitializer>();
 
