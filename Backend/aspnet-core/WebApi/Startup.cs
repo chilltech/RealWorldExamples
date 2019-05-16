@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -51,8 +52,14 @@ namespace WebApi
         {
             if (this._env.IsDevelopment() || this._env.IsEnvironment("Local"))
             {
+                //Uncomment the line below to use and an in-memory database.
                 //services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("TestDB"));
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Filename=./testDb.db"));
+
+                //Uncomment the line below to use and a SQLite database.
+                //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Filename=./testDb.db"));
+
+                //Uncomment the line below to use and a MSSQL database.
+                services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             }
             else
             {
@@ -121,17 +128,17 @@ namespace WebApi
                     googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 })
                 .AddJwtBearer(cfg =>
-                  {
-                      cfg.RequireHttpsMetadata = false;
-                      cfg.SaveToken = true;
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
 
-                      cfg.TokenValidationParameters = new TokenValidationParameters()
-                      {
-                          ValidIssuer = this.Configuration["Tokens:Issuer"],
-                          ValidAudience = this.Configuration["Tokens:Issuer"],
-                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
-                      };
-                  });
+                    cfg.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = this.Configuration["Tokens:Issuer"],
+                        ValidAudience = this.Configuration["Tokens:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                    };
+                });
 
             services.AddScoped<IDbInitializer, DbInitializer>();
 

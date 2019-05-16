@@ -15,6 +15,11 @@ namespace core.EntityFrameworkCore
         {
         }
 
+        //Needed to Creat/Update Migrations.
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //=> optionsBuilder.UseSqlServer(@"Data Source=.\SQLexpress;Initial Catalog=RWE_DB;Integrated Security=True");
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
